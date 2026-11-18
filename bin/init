@@ -59,4 +59,4 @@ echo "Enlazando assets para agentes (Cursor, Claude, etc.)..."
 "$ROOT/bin/link-agent-assets"
 
 echo ""
-echo "Listo. Abrí el IDE en la raíz de andes-agent para trabajar con todos los repos."
+echo "Listo. Abrí el IDE en la raíz del clone de andes/agent para trabajar con todos los repos."

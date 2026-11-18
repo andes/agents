@@ -20,7 +20,7 @@ check() {
   fi
 }
 
-echo "Doctor — andes-agent"
+echo "Doctor — andes/agent"
 echo ""
 
 check "git instalado" command -v git

@@ -1,4 +1,4 @@
-# ANDES — Claude Code
+# ANDES — Claude Code (`andes/agent`)
 
 Leé primero [AGENTS.md](./AGENTS.md) (mapa del sistema y convenciones).
 

@@ -1,6 +1,6 @@
 # Reglas ANDES (agentes)
 
-Aplican al trabajar desde la raíz de `andes-agent`.
+Aplican al trabajar desde la raíz del meta-repo `andes/agent`.
 
 ## Alcance
 
