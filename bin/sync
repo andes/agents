@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=../scripts/lib.sh
+source "$ROOT/scripts/lib.sh"
+
+sync_one() {
+  local name path
+  name="$1"
+  path="$(andes_abs_path "$2")"
+
+  if [[ ! -d "$path/.git" ]]; then
+    echo "  skip $name (no clonado; ejecutá bin/init)"
+    return 0
+  fi
+
+  echo "== $name ($path)"
+
+  if ! git -C "$path" diff --quiet 2>/dev/null || ! git -C "$path" diff --cached --quiet 2>/dev/null; then
+    echo "  skip pull: hay cambios locales sin commitear"
+    git -C "$path" fetch --prune origin 2>/dev/null || echo "  aviso: fetch falló"
+    return 0
+  fi
+
+  if [[ -n "$(git -C "$path" status --porcelain 2>/dev/null)" ]]; then
+    echo "  skip pull: working tree no limpio"
+    git -C "$path" fetch --prune origin 2>/dev/null || true
+    return 0
+  fi
+
+  git -C "$path" fetch --prune origin
+  local branch
+  branch="$(git -C "$path" rev-parse --abbrev-ref HEAD)"
+  if git -C "$path" rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
+    git -C "$path" pull --ff-only origin "$branch" || echo "  aviso: pull ff-only falló en $name"
+  else
+    echo "  aviso: no existe origin/$branch; solo fetch"
+  fi
+}
+
+while IFS=$'\t' read -r name url branch path desc; do
+  [[ -z "$name" ]] && continue
+  sync_one "$name" "$path"
+  echo ""
+done < <(andes_list_repos_tsv)

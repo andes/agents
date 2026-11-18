@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Crea enlaces desde fuentes canónicas en docs/, rules/, skills/ hacia herramientas de agente.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+mkdir -p .cursor/rules .claude/skills
+
+link_rule() {
+  local src="$1"
+  local dest="$2"
+  if [[ ! -f "$src" ]]; then
+    return 0
+  fi
+  mkdir -p "$(dirname "$dest")"
+  if [[ -L "$dest" ]] || [[ -e "$dest" ]]; then
+    rm -f "$dest"
+  fi
+  ln -sf "../../$src" "$dest"
+}
+
+# Cursor: cada .md en rules/ como regla
+for f in rules/*.md; do
+  [[ -f "$f" ]] || continue
+  base="$(basename "$f")"
+  link_rule "$f" ".cursor/rules/$base"
+done
+
+# Claude Code: skills compartidos
+if [[ -d skills ]]; then
+  for d in skills/*/; do
+    [[ -d "$d" ]] || continue
+    name="$(basename "$d")"
+    dest=".claude/skills/$name"
+    rm -rf "$dest"
+    ln -sf "../../skills/$name" "$dest"
+  done
+fi
+
+# CLAUDE.md apunta al mapa principal si no existe o es nuestro stub
+if [[ ! -f CLAUDE.md ]] || grep -q 'andes-agent' CLAUDE.md 2>/dev/null; then
+  cat > CLAUDE.md <<'EOF'
+# ANDES — Claude Code
+
+Leé primero [AGENTS.md](./AGENTS.md) (mapa del sistema y convenciones).
+
+Reglas compartidas: carpeta `rules/`. Skills compartidos: `skills/`.
+EOF
+fi
+
+echo "Assets de agente enlazados en $ROOT"

@@ -1,0 +1,20 @@
+# Clones locales (ver repos.yaml)
+/repos/
+
+# Secretos y entornos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+config.private.ts
+**/config.private.ts
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+# Node (solo si se agregan herramientas locales)
+node_modules/

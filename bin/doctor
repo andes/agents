@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=../scripts/lib.sh
+source "$ROOT/scripts/lib.sh"
+
+ok=0
+warn=0
+
+check() {
+  local label="$1"
+  shift
+  if "$@" >/dev/null 2>&1; then
+    echo "  ok    $label"
+    ok=$((ok + 1))
+  else
+    echo "  fail  $label"
+    warn=$((warn + 1))
+  fi
+}
+
+echo "Doctor — andes-agent"
+echo ""
+
+check "git instalado" command -v git
+check "ruby (parse repos.yaml)" command -v ruby
+check "repos.yaml legible" test -r "$REPOS_YAML"
+
+if command -v ssh >/dev/null 2>&1; then
+  if ssh -o BatchMode=yes -o ConnectTimeout=10 -T git@github.com 2>&1 | grep -qiE 'successfully authenticated|Hi '; then
+    echo "  ok    SSH GitHub"
+    ok=$((ok + 1))
+  else
+    echo "  warn  SSH GitHub no verificado"
+    warn=$((warn + 1))
+  fi
+else
+  echo "  warn  ssh no instalado"
+  warn=$((warn + 1))
+fi
+
+echo ""
+echo "Repos en manifiesto:"
+count=0
+cloned=0
+while IFS=$'\t' read -r name url branch path desc; do
+  [[ -z "$name" ]] && continue
+  count=$((count + 1))
+  target="$(andes_abs_path "$path")"
+  if [[ -d "$target/.git" ]]; then
+    cloned=$((cloned + 1))
+  fi
+done < <(andes_list_repos_tsv)
+echo "  $cloned / $count clonados (ejecutá bin/init para el resto)"
+
+echo ""
+echo "Herramientas opcionales (según repos que uses):"
+for cmd in node npm docker; do
+  if command -v "$cmd" >/dev/null 2>&1; then
+    ver="$("$cmd" --version 2>&1 | head -1)"
+    echo "  ok    $cmd ($ver)"
+  else
+    echo "  —     $cmd no instalado"
+  fi
+done
+
+echo ""
+if [[ "$warn" -gt 0 ]]; then
+  echo "Completado con advertencias ($warn)."
+  exit 0
+fi
+echo "Todo en orden."

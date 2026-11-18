@@ -1,0 +1,123 @@
+# Manifiesto de repositorios ANDES.
+# Para agregar un repo: añadir una entrada bajo `repos` y ejecutar `bin/init`.
+
+repos:
+  - name: api
+    url: git@github.com:andes/api.git
+    branch: master
+    path: repos/api
+    description: API principal de ANDES (Node/Express, MongoDB).
+
+  - name: app
+    url: git@github.com:andes/app.git
+    branch: master
+    path: repos/app
+    description: Aplicación web Angular para ANDES (HCE, módulos clínicos).
+
+  - name: auth
+    url: git@github.com:andes/auth.git
+    branch: master
+    path: repos/auth
+    description: Módulo Angular @andes/auth (JWT, permisos Shiro-trie).
+
+  - name: shared
+    url: git@github.com:andes/shared.git
+    branch: master
+    path: repos/shared
+    description: Librerías y servicios compartidos del frontend @andes/shared.
+
+  - name: plex
+    url: git@github.com:andes/plex.git
+    branch: master
+    path: repos/plex
+    description: Componentes UI/UX @andes/plex para aplicaciones Angular.
+
+  - name: fhir
+    url: git@github.com:andes/fhir.git
+    branch: master
+    path: repos/fhir
+    description: Paquete @andes/fhir (modelos y utilidades FHIR).
+
+  - name: log
+    url: git@github.com:andes/log.git
+    branch: master
+    path: repos/log
+    description: Paquete @andes/log para logging en servicios Node.
+
+  - name: matriculaciones
+    url: git@github.com:andes/matriculaciones.git
+    branch: master
+    path: repos/matriculaciones
+    description: Aplicación Angular de matriculaciones profesionales.
+
+  - name: mobile-app
+    url: git@github.com:andes/mobile-app.git
+    branch: master
+    path: repos/mobile-app
+    description: App móvil ANDES (Ionic/Cordova, Angular).
+
+  - name: monitoreo-app
+    url: git@github.com:andes/monitoreo-app.git
+    branch: master
+    path: repos/monitoreo-app
+    description: Aplicación Angular de monitoreo de ANDES.
+
+  - name: turneroApp
+    url: git@github.com:andes/turneroApp.git
+    branch: master
+    path: repos/turneroApp
+    description: Pantalla de llamado de turnos (Angular, puerto 4201).
+
+  - name: andesMicroservices
+    url: git@github.com:andes/andesMicroservices.git
+    branch: master
+    path: repos/andesMicroservices
+    description: Microservicios Node (CDA, facturación, SMS, integraciones, etc.).
+
+  - name: andes-fhir-server
+    url: git@github.com:andes/andes-fhir-server.git
+    branch: master
+    path: repos/andes-fhir-server
+    description: Servidor facade FHIR R4 sobre node-fhir-server-core.
+
+  - name: andes-api-tools
+    url: git@github.com:andes/api-tools.git
+    branch: master
+    path: repos/andes-api-tools
+    description: Monorepo Lerna de paquetes backend (@andes/core, event-bus, etl, etc.).
+
+  - name: snomed-cie10
+    url: git@github.com:andes/snomed-cie10.git
+    branch: master
+    path: repos/snomed-cie10
+    description: Importador del mapping SNOMED-CT a CIE-10 hacia MongoDB.
+
+  - name: andes-analytics
+    url: git@github.com:liquid36/andes-analytics.git
+    branch: master
+    path: repos/andes-analytics
+    description: Analytics ANDES (API Express + app; fuera de la org andes en GitHub).
+
+  - name: andes-status-health
+    url: git@github.com:andes/andes-status-health.git
+    branch: master
+    path: repos/andes-status-health
+    description: Monitoreo de salud (webhooks/Slack; repo mínimo).
+
+  - name: sala-de-situacion
+    url: git@github.com:andes/sala-de-situacion.git
+    branch: master
+    path: repos/sala-de-situacion
+    description: Sala de situación (workspace Nx).
+
+  - name: documentacion-andes-ris
+    url: git@github.com:hospitalneuquen/documentacion-andes-ris.git
+    branch: main
+    path: repos/documentacion-andes-ris
+    description: Documentación del proyecto de migración e integración RIS/PACS.
+
+  - name: hl7-pacs
+    url: git@github.com:hospitalneuquen/hl7-pacs.git
+    branch: master
+    path: repos/hl7-pacs
+    description: Microservicio HL7 para integración PACS (hospitalneuquen).

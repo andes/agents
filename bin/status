@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=../scripts/lib.sh
+source "$ROOT/scripts/lib.sh"
+
+printf "%-28s %-18s %-8s %s\n" "REPO" "RAMA" "ESTADO" "NOTAS"
+printf "%-28s %-18s %-8s %s\n" "----" "----" "------" "-----"
+
+while IFS=$'\t' read -r name url branch path desc; do
+  [[ -z "$name" ]] && continue
+  local_path="$(andes_abs_path "$path")"
+
+  if [[ ! -d "$local_path/.git" ]]; then
+    printf "%-28s %-18s %-8s %s\n" "$name" "-" "missing" "sin clone"
+    continue
+  fi
+
+  cur_branch="$(git -C "$local_path" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")"
+  dirty="clean"
+  notes=""
+
+  if ! git -C "$local_path" diff --quiet 2>/dev/null || ! git -C "$local_path" diff --cached --quiet 2>/dev/null; then
+    dirty="dirty"
+  elif [[ -n "$(git -C "$local_path" status --porcelain 2>/dev/null)" ]]; then
+    dirty="dirty"
+  fi
+
+  if git -C "$local_path" rev-parse --verify "@{u}" >/dev/null 2>&1; then
+    ahead_behind="$(git -C "$local_path" rev-list --left-right --count "@{u}...HEAD" 2>/dev/null || echo "? ?")"
+    read -r behind ahead <<<"$ahead_behind" || true
+    if [[ "${ahead:-0}" != "0" || "${behind:-0}" != "0" ]]; then
+      notes="↑$ahead ↓$behind vs upstream"
+    fi
+  else
+    notes="sin upstream"
+  fi
+
+  printf "%-28s %-18s %-8s %s\n" "$name" "$cur_branch" "$dirty" "$notes"
+done < <(andes_list_repos_tsv)

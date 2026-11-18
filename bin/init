@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=../scripts/lib.sh
+source "$ROOT/scripts/lib.sh"
+
+require_git() {
+  if ! command -v git >/dev/null 2>&1; then
+    echo "error: git no está instalado" >&2
+    exit 1
+  fi
+}
+
+check_ssh_github() {
+  if command -v ssh >/dev/null 2>&1; then
+    if ! ssh -o BatchMode=yes -o ConnectTimeout=10 -T git@github.com 2>&1 | grep -qiE 'successfully authenticated|Hi '; then
+      echo "aviso: no se pudo verificar acceso SSH a GitHub (¿clave cargada en ssh-agent?)" >&2
+      echo "      Los clones con URL git@github.com pueden fallar." >&2
+    fi
+  else
+    echo "aviso: ssh no está disponible; solo URLs https funcionarán sin prompt interactivo." >&2
+  fi
+}
+
+clone_or_update_entry() {
+  local name url branch path desc
+  name="$1"; url="$2"; branch="$3"; path="$4"; desc="$5"
+  local target
+  target="$(andes_abs_path "$path")"
+  mkdir -p "$(dirname "$target")"
+
+  if [[ -d "$target/.git" ]]; then
+    echo "  ok  $name ya existe en $path"
+    return 0
+  fi
+
+  echo "  clone $name -> $path (rama $branch)"
+  git clone --origin origin --branch "$branch" "$url" "$target" 2>/dev/null || {
+    echo "  aviso: clone con rama $branch falló; intentando clone por defecto + checkout"
+    git clone "$url" "$target"
+    git -C "$target" checkout "$branch" 2>/dev/null || git -C "$target" checkout -b "$branch" "origin/$branch" 2>/dev/null || true
+  }
+}
+
+require_git
+check_ssh_github
+
+echo "Inicializando workspace ANDES en $ROOT"
+echo ""
+
+while IFS=$'\t' read -r name url branch path desc; do
+  [[ -z "$name" ]] && continue
+  clone_or_update_entry "$name" "$url" "$branch" "$path" "$desc"
+done < <(andes_list_repos_tsv)
+
+echo ""
+echo "Enlazando assets para agentes (Cursor, Claude, etc.)..."
+"$ROOT/bin/link-agent-assets"
+
+echo ""
+echo "Listo. Abrí el IDE en la raíz de andes-agent para trabajar con todos los repos."
