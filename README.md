@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # agents
 
 Meta-repo [`andes/agents`](https://github.com/andes/agents) — punto de entrada para desarrollar ANDES con agentes de código. No es un monorepo git: este repositorio trae **manifiesto, documentación compartida y scripts**, y clona el resto de los repos de ANDES en `repos/` (ignorados por git).
