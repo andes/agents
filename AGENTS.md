@@ -1,10 +1,10 @@
 # ANDES — mapa para agentes
 
-Este archivo es la fuente de verdad para **contexto de producto** al trabajar desde el meta-repo [`andes/agent`](https://github.com/andes/agent). El código vive en `repos/*` (clones locales). **No modificar otros repos remotos** salvo que el usuario lo pida explícitamente.
+Este archivo es la fuente de verdad para **contexto de producto** al trabajar desde el meta-repo [`andes/agents`](https://github.com/andes/agents). El código vive en `repos/*` (clones locales). **No modificar otros repos remotos** salvo que el usuario lo pida explícitamente.
 
 ## Qué es ANDES
 
-ANDES es la plataforma de Historia Clínica Electrónica y gestión sanitaria desarrollada por **Red TICs** (Ministerio de Salud de Neuquén, Argentina). El ecosistema está repartido en muchos repositorios GitHub; `andes/agent` los agrupa para desarrollo y asistencia con IA.
+ANDES es la plataforma de Historia Clínica Electrónica y gestión sanitaria desarrollada por **Red TICs** (Ministerio de Salud de Neuquén, Argentina). El ecosistema está repartido en muchos repositorios GitHub; `andes/agents` los agrupa para desarrollo y asistencia con IA.
 
 **TODO:** Enlace oficial a documentación institucional / wiki si existe fuera de estos repos.
 
@@ -83,7 +83,7 @@ Para otros repos, seguir el README de cada carpeta bajo `repos/`.
 
 ## Convenciones para agentes
 
-1. **Workspace:** Trabajar desde la raíz del clone de `andes/agent`. Rutas de código: `repos/<nombre>/…`.
+1. **Workspace:** Trabajar desde la raíz del clone de `andes/agents`. Rutas de código: `repos/<nombre>/…`.
 2. **Manifiesto:** Nuevos repos → entrada en `repos.yaml` + `./bin/init` + actualizar este archivo.
 3. **Paquetes `@andes/*`:** Muchos vienen de npm publicado o de `andes-api-tools`; al cambiar APIs compartidas, revisar consumidores en `api` y `app`.
 4. **Secretos:** Nunca commitear `.env`, `config.private.ts`, claves ni datos de pacientes. Usar `*.example` cuando existan.

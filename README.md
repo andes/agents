@@ -1,6 +1,6 @@
-# agent
+# agents
 
-Meta-repo [`andes/agent`](https://github.com/andes/agent) — punto de entrada para desarrollar ANDES con agentes de código. No es un monorepo git: este repositorio trae **manifiesto, documentación compartida y scripts**, y clona el resto de los repos de ANDES en `repos/` (ignorados por git).
+Meta-repo [`andes/agents`](https://github.com/andes/agents) — punto de entrada para desarrollar ANDES con agentes de código. No es un monorepo git: este repositorio trae **manifiesto, documentación compartida y scripts**, y clona el resto de los repos de ANDES en `repos/` (ignorados por git).
 
 ## Requisitos
 
@@ -11,13 +11,13 @@ Meta-repo [`andes/agent`](https://github.com/andes/agent) — punto de entrada p
 ## Quickstart
 
 ```bash
-git clone git@github.com:andes/agent.git
-cd agent
+git clone git@github.com:andes/agents.git
+cd agents
 ./bin/init          # clona los repos según repos.yaml
 ./bin/doctor        # chequeos opcionales
 ```
 
-Abrí **Cursor / Claude Code / Codex** en la raíz del clone de `andes/agent`, no dentro de un sub-repo suelto. Así el agente ve `AGENTS.md`, `rules/`, `skills/` y todo el código bajo `repos/`.
+Abrí **Cursor / Claude Code / Codex** en la raíz del clone de `andes/agents`, no dentro de un sub-repo suelto. Así el agente ve `AGENTS.md`, `rules/`, `skills/` y todo el código bajo `repos/`.
 
 ## Scripts
 

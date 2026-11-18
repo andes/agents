@@ -41,7 +41,7 @@ fi
 # CLAUDE.md apunta al mapa principal si no existe o es nuestro stub
 if [[ ! -f CLAUDE.md ]] || grep -q 'Leé primero \[AGENTS.md\]' CLAUDE.md 2>/dev/null; then
   cat > CLAUDE.md <<'EOF'
-# ANDES — Claude Code (`andes/agent`)
+# ANDES — Claude Code (`andes/agents`)
 
 Leé primero [AGENTS.md](./AGENTS.md) (mapa del sistema y convenciones).
 
